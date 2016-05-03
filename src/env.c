@@ -9,10 +9,7 @@
 #include "argv.h"
 
 
-int import_env( char ***env ) { 
-	if(  ( *env = environ) == NULL ) {
-        return -1;
-    }
+int import_env( ) { 
     putenv("SHELL=/home/lucien/Documents/SOS/shellme/hush");
     //*env[1] = "SHELL=hush";
     //(void)env;

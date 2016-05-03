@@ -3,7 +3,7 @@
 
 extern char **environ;
 
-int import_env( char ***env ); 
+int import_env( ); 
 
 int search_path( char * cmd, char ** prefix );
 
