@@ -10,9 +10,6 @@
 
 
 int import_env( ) { 
-    putenv("SHELL=/home/lucien/Documents/SOS/shellme/hush");
-    //*env[1] = "SHELL=hush";
-    //(void)env;
     return 0;
 }
 
