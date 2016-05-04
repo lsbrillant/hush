@@ -6,6 +6,7 @@
 #include "argv.h"
 #include "command.h"
 #include "env.h"
+#include "opts.h"
 
 #define HUSH_VERSION 1
 
@@ -20,18 +21,15 @@ int main ( int argc, char ** argv )
     int status;
 	
 	import_env(); 
-	
-	if ( argc == 2 ) {
-        run_command( argv[1] );
-	} else if ( argc >= 3 ) {
-		fprintf( stderr, "Usage: %s string\n\t or run with no args to have an iteractive shell\n", argv[1] );
-		return 1;
-	}
+    
+    do_opts( argc, argv );	
 
 	while (1) {
-        printf( "hushv%d> ",HUSH_VERSION );
+        if ( interactive ) 
+            printf( "hushv%d> ",HUSH_VERSION );
 		if ( getline( &line, &len, stdin ) == -1 ) {
-			printf("\n");
+			if ( interactive )
+                printf("\n");
             break;
         }
         if ( strcmp(line, QUIT_STRING) == 0 ) {
@@ -44,6 +42,7 @@ int main ( int argc, char ** argv )
         }
         waitpid(pid, &status,WCONTINUED);
 	}
-    printf("bye\n");
+    if ( interactive )
+        printf("bye\n");
 	exit(EXIT_SUCCESS);
 }
