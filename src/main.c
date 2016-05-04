@@ -14,9 +14,10 @@
 int main ( int argc, char ** argv ) 
 {	
 	char delim[] = " \t\n";
-	char * line; 
+	char * line;
 	size_t len = 0;
 	pid_t pid;
+    int status;
 	
 	import_env(); 
 	
@@ -38,10 +39,10 @@ int main ( int argc, char ** argv )
         } else if ( strcmp(line, "\n") == 0 ) {
             continue;
         }
-        if ( fork() == 0 ){
+        if ( (pid = fork()) == 0 ){
             run_command( line );
         }
-        wait(0);
+        waitpid(pid, &status,WCONTINUED);
 	}
     printf("bye\n");
 	exit(EXIT_SUCCESS);
