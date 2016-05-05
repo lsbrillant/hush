@@ -20,7 +20,12 @@ int search_path( char * cmd, char ** prefix ) {
     char ** pathargs;
     int numargs, i, error;
     struct stat sb;
-     
+
+    if( strchr(cmd, '/') != NULL ) {
+        *prefix = cmd;
+        return 0;
+    }    
+ 
     p = (char*)getenv("PATH");
     numargs = makeargv( p, delim, &pathargs);
     
