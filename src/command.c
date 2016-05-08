@@ -123,3 +123,15 @@ int parse_and_redirect_out( char *cmd ) {
     }
     return close(outfd);
 }
+/* nulls out the hash char to implement comments for shell scipts */
+int wipe_comments( char *s ) {
+    char *hashloc;
+    if( (hashloc = strchr(s,'#')) == NULL )
+        return 0;
+    if(hashloc == s) {
+        return 1;
+    }
+    *hashloc = 0;
+    return 0; 
+}
+
