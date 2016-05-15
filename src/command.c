@@ -24,18 +24,17 @@ int run_command( char *line ) {
     int child, count, i;
     int fds[2];
     char ** pipelist;
-
-    count = makeargv(line, "|", &pipelist);
-    if ( count < 0) {
+ 
+    if ( (count = makeargv(line, "|", &pipelist)) < 0 ) {
         fprintf(stderr, "Fail to create pipelist\n");
         exit(EXIT_FAILURE);
     }
     for( i=0; i < count - 1; i++ ) {
         if (pipe(fds) == -1)
-            perror_exit("Failed to find any commands\n");
+            perror_exit("Failed to create pipe\n");
         else if ( (child = fork()) == -1 )
             perror_exit("Failed to create process to run command");
-        else if (child) {
+        else if (child==0) {
             if (dup2(fds[1], STDOUT_FILENO) == -1)
                 perror_exit("Failed to connect pipeline");
             if (close(fds[0]) || close(fds[1]))
@@ -65,13 +64,13 @@ int execute_redirect( char *line , int in, int out ) {
         }
         in = 0; 
     }
-    if( out && (parse_and_redirect_out(line) == -1) )
+    if ( out && (parse_and_redirect_out(line) == -1) )
         perror("Failed to redirect output");
     else if ( in && (parse_and_redirect_in(line) == -1) )
         perror("Failed to redirect input");
     else if (makeargv(line, delim, &argv) == -1)
         fprintf(stderr, "Failed to construct an argument array for %s\n", line);
-    else if( search_path( argv[0], &cmd_location ) == -1 )
+    else if ( search_path( argv[0], &cmd_location ) == -1 )
         fprintf(stderr, "No such command : %s\n", argv[0]);
     else { 
         execvp( cmd_location, argv );
