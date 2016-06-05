@@ -6,6 +6,7 @@
 extern char *optarg;
 
 extern int interactive;
+extern int forced_interactive;
 
 int do_opts( int argc , char **argv );
 
